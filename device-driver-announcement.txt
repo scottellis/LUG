@@ -1,0 +1,29 @@
+Linux Kernel Modules
+
+This month's Linux Users Group meeting will be an introduction to 
+writing linux kernel modules. The meeting format will be a hands-on 
+project guided by other LUG members, instead of the standard lecture. 
+
+Kernel modules written by developers outside the core linux team are 
+usually for device drivers. While we won't be developing for an actual 
+device, there are some features all kernel modules share that can be 
+used as a template for your own driver. 
+
+All participants will work through writing, building and testing a 
+simple kernel module exposing a character device interface to userland. 
+
+Linux kernel modules are almost always written in C and that's the 
+language we will be using.
+
+System requirements for those wishing to participate will be posted 
+on the Linux Users Group forum. [link] If you are unable to bring in 
+a system with the minimal requirements you will still be able to work 
+along with someone else. 
+
+Users with kernel development experience are encouraged to attend to 
+help provide assistance.
+
+
+https://help.ubuntu.com/community/Kernel/Compile
+http://fedoraproject.org/wiki/Docs/CustomKernel
+

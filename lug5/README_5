@@ -1,0 +1,15 @@
+Topics for lug5
+
+1. file operations, lug_fops, lug_open
+
+2. cdev_init, cdev_add, cdev_del
+
+3. mknod
+
+4. semaphore, down_interruptible, up
+
+
+
+
+
+

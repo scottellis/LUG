@@ -1,0 +1,13 @@
+Topics for lug1
+
+1. Makefile
+
+2. module_init, module_exit
+
+3. printk
+
+4. lsmod, modprobe, insmod, rmmod
+
+5. syslog, syslog.conf (/etc/rsyslog.d)
+
+
