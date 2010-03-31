@@ -35,7 +35,7 @@ static const struct file_operations lug_fops = {
 	.open =	lug_open,	
 };
 
-static int __init lug_cdev_setup(void)
+static int __init lug_init_cdev(void)
 {
 	int error;
 
@@ -52,7 +52,6 @@ static int __init lug_cdev_setup(void)
 
 	cdev_init(&lug_dev.cdev, &lug_fops);
 	lug_dev.cdev.owner = THIS_MODULE;
-	lug_dev.cdev.ops = &lug_fops;
 
 	error = cdev_add(&lug_dev.cdev, lug_dev.devt, 1);
 	if (error) {
@@ -70,7 +69,7 @@ static int __init lug_init(void)
 
 	sema_init(&lug_dev.sem, 1);
 
-	if (lug_cdev_setup())
+	if (lug_init_cdev())
 		return -1;	
 
 	printk(KERN_INFO "Run : mknod /dev/lug c %d %d\n", 
@@ -93,5 +92,5 @@ module_exit(lug_exit);
 MODULE_AUTHOR("Scott Ellis");
 MODULE_DESCRIPTION("LUG driver");
 MODULE_LICENSE("Dual BSD/GPL");
-MODULE_VERSION("0.1-scott");
+MODULE_VERSION("0.5-scott");
 

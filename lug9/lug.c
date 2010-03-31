@@ -119,7 +119,7 @@ static const struct file_operations lug_fops = {
 	.write = lug_write,
 };
 
-static int __init lug_cdev_setup(void)
+static int __init lug_init_cdev(void)
 {
 	int error;
 
@@ -134,11 +134,8 @@ static int __init lug_cdev_setup(void)
 		return -1;
 	}
 
-	lug_dev.class = class_create(THIS_MODULE, "lug");
-
 	cdev_init(&lug_dev.cdev, &lug_fops);
 	lug_dev.cdev.owner = THIS_MODULE;
-	lug_dev.cdev.ops = &lug_fops;
 
 	error = cdev_add(&lug_dev.cdev, lug_dev.devt, 1);
 	if (error) {
@@ -146,6 +143,18 @@ static int __init lug_cdev_setup(void)
 		unregister_chrdev_region(lug_dev.devt, 1);
 		return -1;
 	}	
+
+	return 0;
+}
+
+static int __init lug_init_class(void)
+{
+	lug_dev.class = class_create(THIS_MODULE, "lug");
+
+	if (!lug_dev.class) {
+		printk(KERN_ALERT "class_create(lug) failed\n");
+		return -1;
+	}
 
 	return 0;
 }
@@ -158,13 +167,23 @@ static int __init lug_init(void)
 
 	sema_init(&lug_dev.sem, 1);
 
-	if (lug_cdev_setup())
-		return -1;	
+	if (lug_init_cdev())
+		goto init_fail_1;
 
+	if (lug_init_class())
+		goto init_fail_2;
+		
 	printk(KERN_INFO "Run : mknod /dev/lug c %d %d\n", 
 			MAJOR(lug_dev.devt), MINOR(lug_dev.devt));
 
 	return 0;
+
+init_fail_2:
+	cdev_del(&lug_dev.cdev);
+	unregister_chrdev_region(lug_dev.devt, 1);
+
+init_fail_1:
+	return -1;
 }
 module_init(lug_init);
 
@@ -172,10 +191,10 @@ static void __exit lug_exit(void)
 {
 	printk(KERN_INFO "lug_exit()\n");
 
+  	class_destroy(lug_dev.class);
+
 	cdev_del(&lug_dev.cdev);
 	unregister_chrdev_region(lug_dev.devt, 1);
-
-  	class_destroy(lug_dev.class);
 
 	if (lug_dev.user_buff)
 		kfree(lug_dev.user_buff);
@@ -186,5 +205,5 @@ module_exit(lug_exit);
 MODULE_AUTHOR("Scott Ellis");
 MODULE_DESCRIPTION("LUG driver");
 MODULE_LICENSE("Dual BSD/GPL");
-MODULE_VERSION("0.1-scott");
+MODULE_VERSION("0.9-scott");
 

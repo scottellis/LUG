@@ -22,5 +22,5 @@ module_exit(lug_exit);
 MODULE_AUTHOR("Scott Ellis");
 MODULE_DESCRIPTION("LUG driver");
 MODULE_LICENSE("Dual BSD/GPL");
-MODULE_VERSION("0.1-scott");
+MODULE_VERSION("0.2-scott");
 

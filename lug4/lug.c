@@ -14,7 +14,7 @@ struct lug_dev {
 
 static struct lug_dev lug_dev;
 
-static int __init lug_cdev_setup(void)
+static int __init lug_init_cdev(void)
 {
 	int error;
 
@@ -41,7 +41,7 @@ static int __init lug_init(void)
 {
 	printk(KERN_INFO "lug_init()\n");
 
-	if (lug_cdev_setup())
+	if (lug_init_cdev())
 		return -1;	
 
 	return 0;
@@ -60,5 +60,5 @@ module_exit(lug_exit);
 MODULE_AUTHOR("Scott Ellis");
 MODULE_DESCRIPTION("LUG driver");
 MODULE_LICENSE("Dual BSD/GPL");
-MODULE_VERSION("0.1-scott");
+MODULE_VERSION("0.4-scott");
 
