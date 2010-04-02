@@ -32,6 +32,7 @@ static struct lug_dev lug_dev;
 static ssize_t lug_write(struct file *filp, const char __user *buff,
 		size_t count, loff_t *f_pos)
 {
+	ssize_t status;
 	unsigned long val;
 	size_t len = USER_BUFF_SIZE - 1;
 
@@ -45,12 +46,21 @@ static ssize_t lug_write(struct file *filp, const char __user *buff,
 		len = count;
 	
 	memset(lug_dev.user_buff, 0, USER_BUFF_SIZE);
-	strncpy(lug_dev.user_buff, buff, len);
+
+	if (copy_from_user(lug_dev.user_buff, buff, len)) {
+		status = -EFAULT;
+		goto lug_write_done;
+	}
 
 	val = simple_strtoul(lug_dev.user_buff, NULL, 0);
 
 	if (val < 1000)
 		read_counter = val;
+
+	status = len;
+	*f_pos += len;
+
+lug_write_done:
 
 	up(&lug_dev.sem);
 
@@ -79,10 +89,13 @@ static ssize_t lug_read(struct file *filp, char __user *buff, size_t count,
 	if (copy_to_user(buff, lug_dev.user_buff, len)) {
 		printk(KERN_ALERT "lug_read(): copy_to_user() failed\n");
 		status = -EFAULT;
-	} else {
-		*offp += len;
-		status = len;
-	}
+		goto lug_read_done;
+	} 
+
+	*offp += len;
+	status = len;
+
+lug_read_done:
 				
 	up(&lug_dev.sem);
 	

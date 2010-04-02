@@ -46,11 +46,14 @@ static ssize_t lug_read(struct file *filp, char __user *buff, size_t count,
 	if (copy_to_user(buff, lug_dev.user_buff, len)) {
 		printk(KERN_ALERT "lug_read(): copy_to_user() failed\n");
 		status = -EFAULT;
-	} else {
-		*offp += len;
-		status = len;
-	}
-				
+		goto lug_read_done;
+	} 
+
+	status = len;
+	*offp += len;
+		
+lug_read_done:
+		
 	up(&lug_dev.sem);
 	
 	return status;	
