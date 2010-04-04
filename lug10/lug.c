@@ -1,7 +1,3 @@
-/*
-  lug10
-*/
-
 #include <linux/init.h>
 #include <linux/module.h>
 #include <linux/fs.h>
@@ -198,7 +194,6 @@ init_fail_2:
 	unregister_chrdev_region(lug_dev.devt, 1);
 
 init_fail_1:
-
 	return -1;
 }
 module_init(lug_init);
