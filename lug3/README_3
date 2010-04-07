@@ -1,7 +1,18 @@
 Topics for lug3
 
 1. module_param
+	include/linux/moduleparam.h
 
+	byte
+	short
+	ushort
+	int
+	uint
+	long
+	ulong
+	charp (string)
+	bool
+	array
 
 
 
