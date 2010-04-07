@@ -1,6 +1,8 @@
 Topics for lug1
 
 1. Makefile
+	linux/Documentation/kbuild/modules.txt
+	The Linux Kernel Module Programming Guide
 
 2. module_init, module_exit
 
